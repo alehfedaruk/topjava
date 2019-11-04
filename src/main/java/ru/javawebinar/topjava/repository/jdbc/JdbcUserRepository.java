@@ -36,7 +36,28 @@ public class JdbcUserRepository implements UserRepository {
 
     @Override
     public User save(User user) {
-        MapSqlParameterSource map = new MapSqlParameterSource()
+        MapSqlParameterSource map = getMap(user);
+
+        if (user.isNew()) {
+            Number newKey = insertUser.executeAndReturnKey(map);
+            user.setId(newKey.intValue());
+        } else if (namedParameterJdbcTemplate.update(
+                "UPDATE users " +
+                        "SET name=:name," +
+                        " email=:email," +
+                        " password=:password, " +
+                        " registered=:registered," +
+                        " enabled=:enabled," +
+                        " calories_per_day=:caloriesPerDay" +
+                        " WHERE id=:id", map)
+                == 0) {
+            return null;
+        }
+        return user;
+    }
+
+    private MapSqlParameterSource getMap(User user) {
+        return new MapSqlParameterSource()
                 .addValue("id", user.getId())
                 .addValue("name", user.getName())
                 .addValue("email", user.getEmail())
@@ -44,16 +65,6 @@ public class JdbcUserRepository implements UserRepository {
                 .addValue("registered", user.getRegistered())
                 .addValue("enabled", user.isEnabled())
                 .addValue("caloriesPerDay", user.getCaloriesPerDay());
-
-        if (user.isNew()) {
-            Number newKey = insertUser.executeAndReturnKey(map);
-            user.setId(newKey.intValue());
-        } else if (namedParameterJdbcTemplate.update(
-                "UPDATE users SET name=:name, email=:email, password=:password, " +
-                        "registered=:registered, enabled=:enabled, calories_per_day=:caloriesPerDay WHERE id=:id", map) == 0) {
-            return null;
-        }
-        return user;
     }
 
     @Override
