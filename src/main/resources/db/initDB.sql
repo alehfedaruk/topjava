@@ -35,5 +35,6 @@ CREATE TABLE meals (
     calories INTEGER DEFAULT 500 NOT NULL,
     user_id INTEGER NOT NULL,
     CONSTRAINT user_meals_idx UNIQUE (id, user_id),
+    CONSTRAINT userid_meals_datetime UNIQUE (date_time, user_id),
     FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 );
