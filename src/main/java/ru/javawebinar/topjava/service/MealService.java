@@ -15,6 +15,8 @@ import static ru.javawebinar.topjava.util.ValidationUtil.checkNotFoundWithId;
 
 @Service
 public class MealService {
+    private static final LocalDate START_OF_TIME = LocalDate.of(0,1,1);
+    private static final LocalDate END_OF_TIME = LocalDate.of(9999,12,31);
 
     private final MealRepository repository;
 
@@ -32,8 +34,8 @@ public class MealService {
 
     public List<Meal> getBetweenDates(@Nullable LocalDate startDate, @Nullable LocalDate endDate, int userId) {
         return repository.getBetween(
-                DateTimeUtil.createDateTime(startDate, LocalDate.MIN, LocalTime.MIN),
-                DateTimeUtil.createDateTime(endDate, LocalDate.MAX, LocalTime.MAX),
+                DateTimeUtil.createDateTime(startDate, START_OF_TIME, LocalTime.MIN),
+                DateTimeUtil.createDateTime(endDate, END_OF_TIME, LocalTime.MAX),
                 userId);
     }
 
