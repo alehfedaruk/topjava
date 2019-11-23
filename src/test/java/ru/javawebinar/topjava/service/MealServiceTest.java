@@ -1,5 +1,6 @@
 package ru.javawebinar.topjava.service;
 
+import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.List;
 
 import static ru.javawebinar.topjava.MealTestData.*;
 import static ru.javawebinar.topjava.UserTestData.ADMIN_ID;
@@ -47,6 +49,7 @@ public class MealServiceTest {
     }
 
     @Test
+    @Transactional
     public void create() throws Exception {
         Meal newMeal = getCreated();
         Meal created = service.create(newMeal, USER_ID);
@@ -56,6 +59,7 @@ public class MealServiceTest {
     }
 
     @Test
+    @Transactional
     public void get() throws Exception {
         Meal actual = service.get(ADMIN_MEAL_ID, ADMIN_ID);
         assertMatch(actual, ADMIN_MEAL1);
@@ -72,6 +76,7 @@ public class MealServiceTest {
     }
 
     @Test
+    @Transactional
     public void update() throws Exception {
         Meal updated = getUpdated();
         service.update(updated, USER_ID);
@@ -84,14 +89,16 @@ public class MealServiceTest {
     }
 
     @Test
+    @Transactional
     public void getAll() throws Exception {
         assertMatch(service.getAll(USER_ID), MEALS);
     }
 
     @Test
+    @Transactional
     public void getBetween() throws Exception {
-        assertMatch(service.getBetweenDates(
+        Assertions.assertThat(service.getBetweenDates(
                 LocalDate.of(2015, Month.MAY, 30),
-                LocalDate.of(2015, Month.MAY, 30), USER_ID), MEAL3, MEAL2, MEAL1);
+                LocalDate.of(2015, Month.MAY, 30), USER_ID).containsAll(List.of(MEAL3, MEAL2, MEAL1)));
     }
 }
