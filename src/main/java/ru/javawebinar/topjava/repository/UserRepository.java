@@ -18,4 +18,8 @@ public interface UserRepository {
     User getByEmail(String email);
 
     List<User> getAll();
+
+    default User getByIdWithMeals(int userId) {
+        throw new UnsupportedOperationException("This operation is unsupported by the current repository implementation");
+    }
 }

@@ -34,7 +34,7 @@ public class MealTestData {
     }
 
     public static void assertMatch(Meal actual, Meal expected) {
-        assertThat(actual).isEqualToIgnoringGivenFields(expected, "user");
+        assertThat(actual).isEqualTo(expected);
     }
 
     public static void assertMatch(Iterable<Meal> actual, Meal... expected) {

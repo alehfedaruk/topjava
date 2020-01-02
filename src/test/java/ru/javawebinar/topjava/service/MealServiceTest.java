@@ -95,4 +95,9 @@ public class MealServiceTest extends AbstractServiceTest{
     public void getBetweenWithNullDates() throws Exception {
         assertMatch(service.getBetweenDates(null, null, USER_ID), MEALS);
     }
+
+    @Test
+    public void getMealWithUserById () {
+        assertMatch(service.get(MEAL1_ID, USER_ID), MEAL1);
+    }
 }
