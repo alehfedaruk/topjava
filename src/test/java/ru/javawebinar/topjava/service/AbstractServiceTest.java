@@ -31,7 +31,7 @@ public abstract class AbstractServiceTest {
 
     private static StringBuilder results = new StringBuilder();
 
-    private static long totalTimeRun;
+    private static long totalRunTime;
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
@@ -42,7 +42,7 @@ public abstract class AbstractServiceTest {
         @Override
         protected void finished(long nanos, Description description) {
             String result = String.format("\n%-25s %7d", description.getMethodName(), TimeUnit.NANOSECONDS.toMillis(nanos));
-            totalTimeRun += nanos;
+            totalRunTime += nanos;
             results.append(result);
             log.info(result + " ms\n");
         }
@@ -52,22 +52,14 @@ public abstract class AbstractServiceTest {
     public static void printResult() {
         log.info
                 ("\n---------------------------------" +
-                "\nTotal Running Time   Duration, ms" +
+                "\nTotal Run Time       Duration, ms" +
                 "\n---------------------------------" +
                 "\n                              "
-                + TimeUnit.NANOSECONDS.toMillis(totalTimeRun) +
+                + TimeUnit.NANOSECONDS.toMillis(totalRunTime) +
                 "\n---------------------------------" +
                 "\nTest                 Duration, ms" +
                 "\n---------------------------------" +
                 results +
                 "\n---------------------------------");
     }
-
-    public abstract void create() throws Exception;
-    public abstract void delete() throws Exception;
-    public abstract void get() throws Exception;
-    public abstract void getAll() throws Exception;
-    public abstract void update() throws Exception;
-    public abstract void deleteNotFound() throws Exception;
-    public abstract void getNotFound() throws Exception;
 }
