@@ -3,7 +3,6 @@ package ru.javawebinar.topjava.repository.datajpa;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.MealRepository;
 
 import java.time.LocalDate;
@@ -26,8 +25,8 @@ public class DataJpaMealRepository implements MealRepository {
         if (!meal.isNew() && get(meal.getId(), userId) == null) {
             return null;
         }
-        User user = crudUserRepository.findById(userId).orElse(null);
-        meal.setUser(user);
+
+        meal.setUser(crudUserRepository.getOne(userId));
 
         return crudRepository.save(meal);
     }
